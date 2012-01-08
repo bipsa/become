@@ -1,0 +1,6 @@
+AddHandler php5-script .php
+<Files ~ "\.conf$">
+Order allow,deny
+Deny from all
+</Files>
+Options +FollowSymlinks
