@@ -1,0 +1,1 @@
+become is a lightweight framework especially for small projects.  become's users only need the knowledge of 3 objects: Page, MySQL, Bitmap. Besides to its simplicity the framework separates the back and front-end resulting in more maintainable projects and a workflow well defined (Design and Development).
