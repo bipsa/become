@@ -7,7 +7,7 @@
 	include('Browser.php');
 	
 	/**
-	* @autor Sebastian Romero
+	* @author Sebastian Romero
 	* @date Febuary 5th 2010
 	* @updated Optional cache was added, bundle javascripts this new inprovements will 
 	* increase the performace of load and server process.
@@ -50,22 +50,22 @@
 		 * @author Sebastian Romero
 		 * this function get the javascript and bundle it
 		 */
-		public function bundleFiles($files){
+		public function bundleFiles($files, $fileName = "bundle.js"){
 			$files = str_get_html($files);
+			$scripts = "";
 			$contentScripts = '';
 			if($files){
 				foreach($files->find("script") as $script) {
 					if($script->getAttribute("src") != ""){
-						$scripts = file_get_contents($script->getAttribute("src"), "r");
-						$myPacker = new JavaScriptPacker($scripts);
-						$contentScripts .= $myPacker->pack() . ";";
+						$scripts .= file_get_contents($script->getAttribute("src"), "r");
 					} else if ($script->innertext != ""){
-						$myPacker = new JavaScriptPacker($script->innertext);
-						$contentScripts .= $myPacker->pack() . ";";
+						$scripts .= $script->innertext;
 					}
 				}
 			}
-			$name = "bundle.js";
+			$myPacker = new JavaScriptPacker($scripts);
+			$contentScripts = $myPacker->pack();
+			$name = $fileName;
 			$template = "<script type=\"text/javascript\" src=\"/cache/" . $name . "\"></script>";
 			$this->setPageOnCache($name, $contentScripts);
 			return $template;
@@ -83,7 +83,7 @@
 			if (!file_exists($cachefolder)) {
 				mkdir($cachefolder, 0777);
 		    }
-			if(!file_exists($cachefolder . $filename)){
+			if(!file_exists($cachefolder . $filename) || Configuration::getParameter("ISDEV") == true){
 				$cachefile = fopen($cachefolder . $filename, "w+");
 				if($cachefile){
 					fwrite($cachefile, $content);
@@ -144,36 +144,6 @@
 			return $userControl; 
 		}
 		
-		
-		/**
-		* Checks defined user controls 
-		* @autor Sebastian Romero
-		* A better way should be use a regular expression, I had some problems with this easy regex with PHP marked as TODO later on.... :(
-		* @how : $page = new Page(); echo $page->checkControls("terminal <become:_/> sigue siendo <become:_ />");
-		*
-		*/
-		public function checkControls($html){
-			$regex = "<TAG:"; $controls = spliti($regex, $html); $method; $stringWithControls = "";
-			$a_method; $methodString;
-			if(count($controls)>1) {
-				for ($x = 0; $x < count($controls); $x++) {
-					$a_method = spliti("/>", $controls[$x]);
-					if(count($a_method)>1) {
-						$methodString = spliti("\(", $a_method[0]);
-						$method = $methodString[0];
-						try {
-							if(trim($method) !== "");
-								$stringWithControls .=  call_user_func(trim($a_method[0])) . $a_method[1];
-						} catch(Exception $error){}
-					} else 
-						$stringWithControls .= $controls[$x];
-				}
-			} else 
-				$stringWithControls = $html;
-			return $stringWithControls;
-		}
-		
-		
 		/**
 		 * 
 		 */
@@ -191,7 +161,7 @@
 		
 		
 		/**
-		 * 
+		 * This method evaluates the user client
 		 */
 		public function isNewBrowser(){
 			$browser = new Browser();

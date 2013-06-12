@@ -41,26 +41,6 @@
 			}
 			return $value;
 		}
-		
-		
-		/**
-		*@alfonso
-		*Parses and gets the parameter the default value is empty string
-		*@example Configuration::getParameter("TAG_CLASS");
-		**/
-		public static function setParameter($parameter, $value){
-			$config = self::loadConfiguration();
-			foreach($config->find('param') as $parameters) { 
-				if($parameters->getAttribute("name") != ""){
-					if($parameters->getAttribute("name") === $parameter){
-						$parameters->setAttribute("value", $value);
-						break;
-					}
-				}
-			}
-			$path = dirname(__FILE__);
-			$config->save($path . DIRECTORY_SEPARATOR . self::$configurationFile);
-		}	
 	}
 	
 ?>

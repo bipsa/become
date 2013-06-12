@@ -2,7 +2,7 @@
 
 
 	/**
-	* @autor Sebastian Romero
+	* @author Sebastian Romero
 	* @date March 17th 2010
 	*/
 	

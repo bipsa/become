@@ -106,8 +106,7 @@
 		**/
 		public function getData(){
 			return $this->arr_dataProvider;
-		}
-		
+		}		
 		
 	}
 ?>

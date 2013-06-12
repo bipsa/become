@@ -68,7 +68,7 @@
 		 * 
 		 * Load a dataset and return JSON format
 		 */
-		public function encodeJSON($ds){
+		public function encode($ds){
 			$json = "[";
 			for($i = 0; $i<$ds->length(); $i++ ){
 				$json .= json_encode( $ds->getElementByIndex($i)->getData());
